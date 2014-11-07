@@ -1,0 +1,92 @@
+
+********************************** Flower Bucket **************************************
+*	'navi.json' is derived from category to support the routing (addressing) mechanism
+*	'models'
+***************************************************************************************
+
+Bucket([flower].vasey.com/)
+	|
+	|---- navi.json		(based categories, serve routing and addressing)
+	|---- models/
+	|		|---- cate1/
+	|		|		|---- cate1-1/	(e.g. models/cate1/cate1-1/1001.json)
+	|		|		|---- cate1-2/	(e.g. models/cate1/cate1-2/1011.json)
+	|		|---- cate2/
+	|		|		|---- cate2-1/
+	.		.
+	.		.
+	|---- resources/
+	|		|---- images/
+	|		|---- videos/
+	|		|---- texts/
+	|		|---- audios/
+	|
+	|---- custom
+	|		|---- default/		(layout.html, layout.style -- congregate multi-widgets)
+	|		|---- widgets/
+	|		|		|---- html/
+	|		|		|---- scripts/
+	|		|		|---- styles/
+	|		|		
+	|		|---- styles/
+	|		|		|---- cate1/
+	|		|		|		|---- cate1-1/ (custom/styles/cate1-1/widget.style)
+	|		|		|		|---- cate1-2/	
+	|		|		|---- cate2/
+	|		|				|---- cate2-1/
+	.		.
+	.		.
+	
+navi.json:
+{
+	"[path1]":"[widget-html]",
+	"[path2]":"[widget-html]",
+	...
+}
+
+
+				
+********************************** API Bucket **************************************
+*	
+***************************************************************************************				
+			
+Bucket(api.vasey.com/)
+	|
+	|---- html/
+			|
+			|---- widgets/		(html/widgets/structuredarticle.html, html/widgets/login.html)
+	|
+	|---- scripts/
+			|
+			|---- widgets/		(controllers for each widget)
+			|
+			|---- lib/			(CDN-fallback libraries and script files common in vasey)
+	|
+	|---- styles/
+			|
+			|--- widgets/
+			|
+			|---- lib/			(CDN-fallback libraries and style files common in vasey)
+	|
+	|---- images/				(system images)
+	|
+	|---- videos/				(system videos)
+	|
+	|---- audios/				(system audios)
+	|
+	|---- demoresources/
+			|
+			|---- texts/	(texts/1.text)
+			|
+			|---- images/	(images/1.jpg, images/2.jpg, images/3.jpg,...)
+			|
+			|---- videos/
+			|
+			|---- audios/
+	|
+	|---- demomodel/	(default Models, .json, for all widgets)
+	
+	
+	
+	
+	

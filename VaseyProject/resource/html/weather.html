@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>JavaScript Native Demo</title>
+	<link href="/styles/style.css" rel="stylesheet" type="text/css">
+    <script src="/scripts/common.js" ></script>
+    
+    <style>
+    	body{
+    		width:100%;
+			position:relative;
+			float:left;
+    		min-height: 500px;
+    		padding:50px 100px;
+    	}
+    	#week-grid div{
+    		border-bottom: 1px dotted #c0c0c0;
+    		padding: 0 20px;
+    	}
+	  
+	</style>
+</head>
+
+<body>
+	<div style="position:relative; float:left; min-height: 800px; width:800px; padding:40px; background-color:#f8f8f8">
+		<h4 style="float:right"><i style="color:#808080">Over 2 hours work. I owe it to google search. --- Robinson</i></h4><br><br>
+		<h2 style="margin:20px; text-align:center">Weather Demo!!!</h2>
+		<div style="position:relative; width:150px;float:left">
+			<h4><button type="button" onclick="wthr.loadWeather('today')">Today</button></h4>
+			<h4><button type="button" onclick="wthr.loadWeather('week')">Week</button></h4>
+			<select onchange="wthr.cityChange(this)">
+				<option value="toronto,ca">Toronto</option>
+				<option value="ottawa,ca">Attawa</option>
+				<option value="lonton,uk">Lonton</option>
+			</select>
+		</div>
+		<div style="position:relative; width:550px;float:left;background-color:white">
+			<div id="today-ctner" style="display:none">
+				<h4>&nbsp;&nbsp;Current Weather --- <i class="city-name" style="color:red"></i></h4>
+				<div style="padding:10px 30px">
+					<img id="today-icon" src="" />
+				</div>
+				<div style="padding:10px 30px">
+					<h3 style="float:left; color:#c0c0c0">Temperature:&nbsp;&nbsp;&nbsp;</h3>
+					<h1 id="today-temp" style="margin-top:10px">&nbsp;&deg;C</h1>
+				</div>
+			</div>
+			<div id="week-ctner" style="display:none">
+				<h4>&nbsp;&nbsp;Next 7 Days --- <i class="city-name" style="color:red"></i></h4>
+				<div id="week-grid"></div>
+			</div>
+		</div>
+	</div>
+</body>
+
+<script>
+/* -----Just define a namespace for weather.-------- */
+	var wthr = wthr||{};
+	var util = util||{};
+	
+	wthr.jsonBase = "http://api.openweathermap.org/data/2.5/"
+	wthr.defaultMode = "today";
+	wthr.defaultCity = "toronto,ca";
+	wthr.todayInfo = {};	//Obj for current weather for any cities.
+	wthr.weekInfo = {};		//Obj for week forest for any cities.
+	
+	//City change jandler
+	wthr.cityChange = function(src){
+		localStorage.setItem("city",src.value);
+		wthr.loadWeather();
+	};
+	
+	
+/* ----------- Travesal DOM to render weather panels --------------------- */
+	wthr.renderToday = function(){
+		document.getElementById('today-ctner').style.display = "";
+		document.getElementById('week-ctner').style.display = "none";
+		util.setByClass("city-name",localStorage.getItem('city'));
+		document.getElementById('today-icon').src = "http://openweathermap.org/img/w/" + wthr.todayInfo.weather[0].icon +".png";
+		document.getElementById('today-temp').innerHTML = (wthr.todayInfo.main.temp-273.15).toFixed(2) + "&nbsp;&deg;C";
+	};
+	
+	wthr.renderWeek = function(){
+		var wList = wthr.weekInfo.list;
+		var grid="";
+		document.getElementById('today-ctner').style.display = "none";
+		document.getElementById('week-ctner').style.display = "";
+		util.setByClass("city-name",localStorage.getItem('city'));
+		document.getElementById("week-grid").innerHTML = "";
+		for(var i=0; i<wList.length; i++){
+			grid +="<div><img src='http://openweathermap.org/img/w/"+ wList[i].weather[0].icon+ ".png'>"
+					+ "&nbsp;&nbsp;&nbsp;&nbsp;"+wList[i].temp.morn.toFixed(1)+"&deg;C(Morning)"
+					+ "&nbsp;&nbsp;&nbsp;&nbsp;"+wList[i].temp.day.toFixed(1)+"&deg;C(Day)"
+					+ "&nbsp;&nbsp;&nbsp;&nbsp;"+wList[i].temp.eve.toFixed(1)+"&deg;C(Evening)"
+					+ "</div>"
+		}
+		
+		document.getElementById('week-grid').innerHTML = grid;
+	};
+	
+	
+	
+	
+/*   ------------ Events:  After all, the UI is something driven by events -----------   */	
+	document.addEventListener("todayOk", function(e) {
+		localStorage.setItem("mode","today");
+		localStorage.setItem("city",e.detail);
+		wthr.renderToday();
+	});
+	document.addEventListener("weekOk", function(e) {
+		localStorage.setItem("mode","week");
+		localStorage.setItem("city",e.detail);
+		wthr.renderWeek();
+	});
+	
+	
+	
+/*   ------------ click-handler, Ajax retreiving services -----------   */
+	
+	wthr.loadWeather = function(m){
+	
+		var city = localStorage.getItem("city");
+		var mode = m? m:localStorage.getItem("mode");
+		var xhr = new XMLHttpRequest();
+		
+		mode=="today"? xhr.open("GET",wthr.jsonBase+"weather?q="+city,true): xhr.open("GET",wthr.jsonBase+"forecast/daily?mode=json&units=metric&cnt=7&q="+city,true);
+		
+		xhr.onreadystatechange=function(){
+			
+			//ajax result handler
+			if (xhr.status==200 && xhr.readyState==4){
+				mode=="today"? wthr.todayInfo=JSON.parse(xhr.responseText): wthr.weekInfo=JSON.parse(xhr.responseText);
+				
+				//Use an event to trigger View refreshing immediately after ajax-done
+				document.dispatchEvent(new CustomEvent(mode+"Ok", {"detail": city}));
+		  	};
+		};
+		
+		xhr.send();
+	}
+	
+	/*  ----- Start ---------- */
+	
+	wthr.kickoff = function(){
+		console.log(localStorage.getItem("city"))
+		if(localStorage.getItem("mode")=="undefined"){
+			localStorage.setItem("mode",wthr.defaultMode);
+		};
+		if(localStorage.getItem("city")=="undefined"){
+			localStorage.setItem("city",wthr.defaultCity);
+		};
+		
+		wthr.loadWeather();
+	}
+	
+	wthr.kickoff();
+	
+	/* -------- Copy from Internet -------------*/
+	util.setByClass = function(c, content) {
+	    var elems = document.getElementsByTagName('*'), i;
+	    for (i in elems) {
+	        if((' ' + elems[i].className + ' ').indexOf(' ' + c + ' ')
+	                > -1) {
+	            elems[i].innerHTML = content;
+	        }
+	    }
+	}
+</script>
+</html>

@@ -1,0 +1,114 @@
+
+<!DOCTYPE html>
+
+<html data-ng-app="App">
+<head>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Documentation</title>
+    
+	<!-- Including script libraries and CSS theme -->
+	<% include resource %>
+	
+    <style>
+    	body{
+    		padding: 30px 60px 30px 60px;
+    	}
+    	.docCtner{
+    		margin:10px;
+    		padding: 10px;
+    		width:100%;
+    		font-family:consolas
+    	}
+    	
+    	.docCtner h4{
+    		float: left;
+    		width: 100%;
+    	}
+    	
+    	.docCtner ul li{
+    		float: left;
+    		white-space: nowrap;
+    		font-size: 1.2em
+    	}
+    </style>
+</head>
+
+<body data-ng-controller='appBodyController' data-ng-click='anyClickOnBody($event)'>
+	
+	<% include maskPop %>
+	
+		<h2 style="width:100%; background-color:#f8f8f8">Documentation </h2>
+		<div class='docCtner' data-ng-controller='docListController'>
+			<h4>~ Wiki ~</h4>
+			<ul style="width:100%; list-style:none">
+				<li  class="bg-highlight-hover" data-ng-repeat="wiki in docs.wikiList" style="padding-right:30px;">
+					<a href="" data-ng-controller="_scopeCtrl" 
+							data-cstm-popscreen="{url:'/html/dev/md.html',width:880}" 
+							data-ng-init='md="dev/wiki/"+wiki'>
+						{{wiki}}&nbsp;
+					</a>
+				</li>
+			</ul>
+			
+			<h4>~ Project README ~</h4>
+			<ul style="width:100%; list-style:none">
+				<li  class="bg-highlight-hover" data-ng-repeat="readme in docs.readmeList" style="padding-right:30px;">
+					<a href="" data-ng-controller="_scopeCtrl" 
+							data-cstm-popscreen="{url:'/html/dev/md.html',width:880}" 
+							data-ng-init='md=readme'>
+					{{readme}}&nbsp;</a>
+				</li>
+			</ul>
+			
+			<h4>~ Client Documents ~</h4>
+			<ul style="width:100%; list-style:none">
+				<li  class="bg-highlight-hover" data-ng-repeat="doc in docs.clientRdmList" style="padding-right:30px;">
+					<a href="" data-ng-controller="_scopeCtrl" 
+							data-cstm-popscreen="{url:'/html/dev/md.html',width:880}" 
+							data-ng-init='md="resource/scripts/"+ doc'>
+					{{doc}}&nbsp;</a>
+				</li>
+			</ul>
+			
+			<h4>~ Server Documents ~</h4>
+			<ul style="width:100%; list-style:none">
+				<li  class="bg-highlight-hover" data-ng-repeat="doc in docs.serverRdmList" style="padding-right:30px;">
+					<a href="" data-ng-controller="_scopeCtrl" 
+							data-cstm-popscreen="{url:'/html/dev/md.html',width:880}" 
+							data-ng-init='md=doc'>
+					{{doc}}&nbsp;</a>
+				</li>
+			</ul>
+			
+			<h4>~ Notes ~</h4>
+			<ul style="width:100%; list-style:none">
+				<li  class="bg-highlight-hover" data-ng-repeat="note in docs.noteList" style="padding-right:30px;">
+					<a href="" data-ng-controller="_scopeCtrl" 
+							data-cstm-popscreen="{url:'/html/dev/md.html',width:880}" 
+							data-ng-init='md="dev/notes/"+note'>
+						{{note}}&nbsp;
+					</a>
+				</li>
+			</ul>
+		</div>
+</body>
+
+	
+	<script>
+		var sys_ = sys_||{};
+		sys_.docs = {
+						wikiList: angular.fromJson(<%- wikiList %>),
+						noteList: angular.fromJson(<%- noteList %>),
+						readmeList: angular.fromJson(<%- readmeList %>),
+						clientRdmList: angular.fromJson(<%- clientRdmList %>),
+						serverRdmList: angular.fromJson(<%- serverRdmList %>)
+					}
+		
+		sys_.allModules = ['ngRoute','ngCookies','ngSanitize','ngAnimate','ngTouch','cstmDirectives','devDoc'];
+	</script>
+	
+	<script src='/scripts/dev/devDoc.js'></script>
+	<script src='/scripts/App.js'></script>
+	
+</html>

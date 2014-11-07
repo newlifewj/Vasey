@@ -1,0 +1,11 @@
+
+<div class='demoPanel' data-ng-controller='demoPanelController'>
+	<h4 style='color:blue'>{{model.text}}</h4>
+	<h4 style='color:grey'>{{text}}</h4>
+	<div class='demoComponentCtner' data-ng-controller='_scopeCtrl' 
+				data-ng-include='"/html/components/demoComponent.html"' data-ng-init='model=panelModel1'>
+	</div>
+	<div class='dynamicComponentCtner' data-ng-controller='_scopeCtrl' 
+				data-ng-include='"/ejs/components/dynamicComponent"' data-ng-init='cfg="CFG"; model=panelModel2'>
+	</div>
+</div>

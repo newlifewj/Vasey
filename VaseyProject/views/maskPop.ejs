@@ -1,0 +1,24 @@
+<style>
+	#_mask{
+		position: absolute;
+		background-color: grey;
+		width: 100%;
+		height: 100%;
+		z-index: 10000;
+		opacity: 0.6;
+		margin:0;
+		padding:0;
+		top:0;
+		left:0;
+	}
+	#_overMask{
+		position: absolute;
+		/*background-color: white;*/
+		z-index: 10001;
+	}
+</style>
+<div id="_mask" data-ng-show="_maskingScrn==true" data-ng-click="_removeScrnMask($event)"></div>
+<div id="_overMask" data-ng-controller="_scopeCtrl" data-ng-show="_maskingScrn==true">
+	<div id="_staticPop"></div>
+	<div data-ng-include="_popScrnUrl"></div>
+</div>

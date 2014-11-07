@@ -1,0 +1,9 @@
+
+<div class='demoComponent' data-ng-controller='demoComponentController'>
+	<h4 style='color:blue'>{{model.text}}</h4>
+	<h4 style='color:grey'>{{text}}</h4>
+	<!-- Include a widget -->
+	<div class='demoWidgetCtner' data-ng-controller='_scopeCtrl' 
+				data-ng-include='"/html/widgets/demoWidget.html"' data-ng-init='cfg=componentCfg; model=internalModel'>
+	</div>
+</div>

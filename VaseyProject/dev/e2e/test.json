@@ -1,0 +1,60 @@
+[
+	{
+		"type":"static",
+		"path": "widgets/", 
+		"name": "demoWidget",
+		"modules": [
+		            	{"path":"widgets/", "name":"demoWidget"}
+		            ]
+	},
+	
+	{
+		"type":"static",
+		"path": "components/", 
+		"name": "demoComponent",
+		"modules": [
+		            	{"path":"components/", "name":"demoComponent"},
+		            	{"path":"widgets/", "name":"demoWidget"}
+		           ]
+	},
+	
+	{
+		"type":"dynamic",
+		"path": "components/", 
+		"name": "dynamicComponent",
+		"modules": [
+		            	{"path":"components/", "name":"dynamicComponent"},
+		            	{"path":"widgets/", "name":"demoWidget"}
+		           ]
+	},
+	
+	{
+		"type":"static",
+		"path": "panels/", 
+		"name": "demoPanel", 
+		"modules": [
+		            	{"path":"panels/", "name":"demoPanel"},
+		            	{"path":"components/", "name":"demoComponent"},
+		            	{"path":"components/", "name":"dynamicComponent"},
+	            		{"path":"widgets/", "name":"demoWidget"}
+	            	]
+	},
+	
+	{
+		"type":"static",
+		"path": "directives/", 
+		"name": "cstmConfirm", 
+		"modules": [
+		            	{"path":"directives/", "name":"cstmDirectives"}
+	            	]
+	},
+	
+	{
+		"type":"static",
+		"path": "directives/", 
+		"name": "demoDirective", 
+		"modules": [
+		            	{"path":"directives/", "name":"demoDirective"}
+	            	]
+	}
+]

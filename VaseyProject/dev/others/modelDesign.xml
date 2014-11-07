@@ -1,0 +1,736 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- SQL XML created by WWW SQL Designer, http://code.google.com/p/wwwsqldesigner/ -->
+<!-- Active URL: file:///D:/wwwsqldesigner-2.7/index.html -->
+<sql>
+<datatypes db="mysql">
+	<group label="Numeric" color="rgb(238,238,170)">
+	 	<type label="TINYINT" length="0" sql="TINYINT" quote=""/>
+	 	<type label="SMALLINT" length="0" sql="SMALLINT" quote=""/>
+	 	<type label="MEDIUMINT" length="0" sql="MEDIUMINT" quote=""/>
+	 	<type label="INT" length="0" sql="INT" quote=""/>
+		<type label="Integer" length="0" sql="INTEGER" quote=""/>
+		<type label="BIGINT" length="0" sql="BIGINT" quote=""/>
+		<type label="Decimal" length="1" sql="DECIMAL" re="DEC" quote=""/>
+		<type label="Single precision" length="0" sql="FLOAT" quote=""/>
+		<type label="Double precision" length="0" sql="DOUBLE" re="DOUBLE" quote=""/>
+	</group>
+
+	<group label="Character" color="rgb(255,200,200)">
+		<type label="Char" length="1" sql="CHAR" quote="'"/>
+		<type label="Varchar" length="1" sql="VARCHAR" quote="'"/>
+		<type label="Text" length="0" sql="MEDIUMTEXT" re="TEXT" quote="'"/>
+		<type label="Binary" length="1" sql="BINARY" quote="'"/>
+		<type label="Varbinary" length="1" sql="VARBINARY" quote="'"/>
+		<type label="BLOB" length="0" sql="BLOB" re="BLOB" quote="'"/>
+	</group>
+
+	<group label="Date &amp; Time" color="rgb(200,255,200)">
+		<type label="Date" length="0" sql="DATE" quote="'"/>
+		<type label="Time" length="0" sql="TIME" quote="'"/>
+		<type label="Datetime" length="0" sql="DATETIME" quote="'"/>
+		<type label="Year" length="0" sql="YEAR" quote=""/>
+		<type label="Timestamp" length="0" sql="TIMESTAMP" quote="'"/>
+	</group>
+	
+	<group label="Miscellaneous" color="rgb(200,200,255)">
+		<type label="ENUM" length="1" sql="ENUM" quote=""/>
+		<type label="SET" length="1" sql="SET" quote=""/>
+		<type label="Bit" length="0" sql="bit" quote=""/>
+	</group>
+</datatypes><table x="411" y="383" name="Content">
+<row name="id" null="1" autoincrement="1">
+<datatype>TINYINT</datatype>
+<default>NULL</default></row>
+<row name="lang" null="1" autoincrement="0">
+<datatype>VARCHAR</datatype>
+<default>NULL</default><comment>can be "en", "cn" or "bilingual"</comment>
+</row>
+<row name="propagation" null="1" autoincrement="0">
+<datatype>VARCHAR</datatype>
+<default>NULL</default><comment>Enum, [public, local, private, draft]</comment>
+</row>
+<row name="%references [opt]" null="1" autoincrement="0">
+<datatype>ENUM</datatype>
+<default>NULL</default><relation table="Content" row="id" />
+<comment>ManyToMany related with contents in Site</comment>
+</row>
+<row name="#textEn" null="1" autoincrement="0">
+<datatype>ENUM</datatype>
+<default>NULL</default><relation table="LangText" row="id" />
+<comment>ManyToMany related with LangText, multi-lingual textual items </comment>
+</row>
+<row name="#textZh" null="1" autoincrement="0">
+<datatype>ENUM</datatype>
+<default>NULL</default><relation table="LangText" row="id" />
+</row>
+<row name="%sites" null="1" autoincrement="0">
+<datatype>ENUM</datatype>
+<default>NULL</default><relation table="Site" row="id" />
+<comment>ManyToMany related with Site (Maybe one content shared by multiple sites)</comment>
+</row>
+<row name="%video [opt]" null="1" autoincrement="0">
+<datatype>ENUM</datatype>
+<default>NULL</default><relation table="CloudVideo" row="id" />
+<comment>ManyToMany related with CloudVideo</comment>
+</row>
+<row name="%audio [opt]" null="1" autoincrement="0">
+<datatype>ENUM</datatype>
+<default>NULL</default><relation table="CloudAudio" row="id" />
+<comment>ManyToMany related with CloudAudio</comment>
+</row>
+<row name="%files [opt]" null="1" autoincrement="0">
+<datatype>ENUM</datatype>
+<default>NULL</default><relation table="CloudFile" row="id" />
+<comment>ManyToMany related with CloudFile</comment>
+</row>
+<row name="%images [opt]" null="1" autoincrement="0">
+<datatype>ENUM</datatype>
+<default>NULL</default><relation table="CloudImage" row="id" />
+<comment>ManyToMany related with CloudImage</comment>
+</row>
+<row name="%categories" null="1" autoincrement="0">
+<datatype>ENUM</datatype>
+<default>NULL</default><relation table="Category" row="id" />
+<comment>ManyToMany related with Category</comment>
+</row>
+<row name="%tags" null="1" autoincrement="0">
+<datatype>ENUM</datatype>
+<default>NULL</default><relation table="Tag" row="id" />
+<comment>ManyToMany related with Tag</comment>
+</row>
+<key type="PRIMARY" name="">
+<part>id</part>
+</key>
+<comment>All Contents in FF have same data structure. But they are sorted into different Sites, types, Categories, tags. And a contents are related with each other.  There are four boilerplate fileds no shown: createdBy, modifiedBy, createdDate and modifiedDate</comment>
+</table>
+<table x="693" y="999" name="Category">
+<row name="id" null="1" autoincrement="1">
+<datatype>TINYINT</datatype>
+<default>NULL</default></row>
+<row name="order" null="1" autoincrement="0">
+<datatype>INTEGER</datatype>
+<default>NULL</default><comment>define the order in sibling categories</comment>
+</row>
+<row name="titleEn" null="1" autoincrement="0">
+<datatype>VARCHAR</datatype>
+<default>NULL</default><comment>titleEn and titleCn can't be both null</comment>
+</row>
+<row name="titleZh" null="1" autoincrement="0">
+<datatype>VARCHAR</datatype>
+<default>NULL</default></row>
+<row name="path" null="1" autoincrement="0">
+<datatype>VARCHAR</datatype>
+<default>NULL</default><comment>path is the url-path, ASSIC lower-case, no spaces</comment>
+</row>
+<row name="description" null="1" autoincrement="0">
+<datatype>VARCHAR</datatype>
+<default>NULL</default></row>
+<row name="#parent" null="1" autoincrement="0">
+<datatype>ENUM</datatype>
+<default>NULL</default><relation table="Category" row="id" />
+</row>
+<row name="%children" null="1" autoincrement="0">
+<datatype>ENUM</datatype>
+<default>NULL</default><comment>ManyToOne related with Category (supper directory)</comment>
+</row>
+<row name="#site" null="1" autoincrement="0">
+<datatype>ENUM</datatype>
+<default>NULL</default><relation table="Site" row="id" />
+<comment>ManyToOne related with Site, each site has its own category tree</comment>
+</row>
+<row name="#listView" null="1" autoincrement="0">
+<datatype>ENUM</datatype>
+<default>NULL</default><relation table="Widget" row="id" />
+<comment>ManyToOne related with Component, the component for the list of current category</comment>
+</row>
+<key type="PRIMARY" name="">
+<part>id</part>
+</key>
+<comment>category construct a tree structure. Each Site can define its own category and the Menu View will be created according to categories. In FF, more than 2-level categories are not permitted.   Each category (menu item) can be configured with View Component which is 'ListView' or 'InstanceView'.   </comment>
+</table>
+<table x="405" y="837" name="Tag">
+<row name="id" null="1" autoincrement="1">
+<datatype>TINYINT</datatype>
+<default>NULL</default></row>
+<row name="titleEn" null="1" autoincrement="0">
+<datatype>VARCHAR</datatype>
+<default>NULL</default><comment>title is shown in UI as tag-name</comment>
+</row>
+<row name="titleZh" null="1" autoincrement="0">
+<datatype>VARCHAR</datatype>
+<default>NULL</default><comment>tileEn and titleCn, they can't be both null</comment>
+</row>
+<row name="path" null="1" autoincrement="0">
+<datatype>VARCHAR</datatype>
+<default>NULL</default><comment>path is the path element is hash-bang address</comment>
+</row>
+<row name="description" null="1" autoincrement="0">
+<datatype>VARCHAR</datatype>
+<default>NULL</default></row>
+<row name="#site" null="1" autoincrement="0">
+<datatype>ENUM</datatype>
+<default>NULL</default><relation table="Site" row="id" />
+<comment>ManyToOne related with Site</comment>
+</row>
+<row name="#listView" null="1" autoincrement="0">
+<datatype>ENUM</datatype>
+<default>NULL</default><relation table="Widget" row="id" />
+<comment>ManyToOne related with Component, how to present list of a tag</comment>
+</row>
+<row name="%contents" null="1" autoincrement="0">
+<datatype>ENUM</datatype>
+<default>NULL</default></row>
+<key type="PRIMARY" name="">
+<part>id</part>
+</key>
+<comment>A tag is a key word. Add a tag to components if they are related with this keywrods. All Sites share a same keyword vocabulary and they can add new tag if necessary</comment>
+</table>
+<table x="709" y="483" name="Site">
+<row name="id" null="1" autoincrement="1">
+<datatype>TINYINT</datatype>
+<default>NULL</default></row>
+<row name="name" null="1" autoincrement="0">
+<datatype>VARCHAR</datatype>
+<default>NULL</default><comment>The Site name or brand, Site master can chose appending it to logo or not</comment>
+</row>
+<row name="domain" null="1" autoincrement="0">
+<datatype>VARCHAR</datatype>
+<default>NULL</default><comment>The path field is the identifier path in Site URL</comment>
+</row>
+<row name="status" null="1" autoincrement="0">
+<datatype>VARCHAR</datatype>
+<default>NULL</default><comment>There are 3 status: 'scaffolding', 'published' and 'maintaining'</comment>
+</row>
+<row name="accessibility" null="1" autoincrement="0">
+<datatype>VARCHAR</datatype>
+<default>NULL</default><comment>'private' or 'public'</comment>
+</row>
+<row name="description" null="1" autoincrement="0">
+<datatype>VARCHAR</datatype>
+<default>NULL</default><comment>description needn't multiple lingual because it's only for the master</comment>
+</row>
+<row name="socials" null="1" autoincrement="0">
+<datatype>VARCHAR</datatype>
+<default>NULL</default><comment>JSON-array: [{"title":"xx","url":'yy"},...]</comment>
+</row>
+<row name="#location[opt]" null="1" autoincrement="0">
+<datatype>ENUM</datatype>
+<default>NULL</default><relation table="Location" row="id" />
+<comment>OneToOne related with Location, GMap implementation. Maybe used for Contacts</comment>
+</row>
+<row name="%masters" null="1" autoincrement="0">
+<datatype>ENUM</datatype>
+<default>NULL</default><relation table="FlUser" row="id" />
+<comment>ManyToMany related with FIUser (masters of this site)</comment>
+</row>
+<row name="%managers [opt]" null="1" autoincrement="0">
+<datatype>ENUM</datatype>
+<default>NULL</default><relation table="FlUser" row="id" />
+<comment>ManyToMany related with FlUser (managers of this site)</comment>
+</row>
+<row name="%members" null="1" autoincrement="0">
+<datatype>ENUM</datatype>
+<default>NULL</default><relation table="FlUser" row="id" />
+<comment>ManyToMany related with FlUser (members of this site group)</comment>
+</row>
+<row name="#hostData" null="1" autoincrement="0">
+<datatype>ENUM</datatype>
+<default>NULL</default><relation table="HostData" row="id" />
+<comment>OneToOne related with HostData</comment>
+</row>
+<row name="#field" null="1" autoincrement="0">
+<datatype>ENUM</datatype>
+<default>NULL</default><relation table="*Field" row="id" />
+<comment>ManyToOne related with Field</comment>
+</row>
+<row name="#logo" null="1" autoincrement="0">
+<datatype>ENUM</datatype>
+<default>NULL</default><relation table="CloudImage" row="id" />
+<comment>ManyToOne related with CloudImage</comment>
+</row>
+<key type="PRIMARY" name="">
+<part>id</part>
+</key>
+<comment>How to host???</comment>
+</table>
+<table x="390" y="124" name="Message">
+<row name="id" null="1" autoincrement="1">
+<datatype>TINYINT</datatype>
+<default>NULL</default></row>
+<row name="new" null="1" autoincrement="0">
+<datatype>TINYINT</datatype>
+<default>NULL</default><comment>Is it read by the receiver</comment>
+</row>
+<row name="senderVisible" null="1" autoincrement="0">
+<datatype>TINYINT</datatype>
+<default>NULL</default><comment>If this message visible in sent box</comment>
+</row>
+<row name="receiverVisible" null="1" autoincrement="0">
+<datatype>TINYINT</datatype>
+<default>NULL</default><comment>if this message visible in in-box</comment>
+</row>
+<row name="#content" null="1" autoincrement="0">
+<datatype>ENUM</datatype>
+<default>NULL</default><relation table="Content" row="id" />
+<comment>ManyToOne related with Content (for forward purpose)</comment>
+</row>
+<row name="#messageReplyTo [opt]" null="1" autoincrement="0">
+<datatype>ENUM</datatype>
+<default>NULL</default><relation table="Message" row="id" />
+<comment>ManyToOne related with Message, reply to what message if this message is an answer-message</comment>
+</row>
+<row name="%replies" null="1" autoincrement="0">
+<datatype>ENUM</datatype>
+<default>NULL</default><comment>OneToMany related with Messsage, a message has multi-answers</comment>
+</row>
+<row name="%receivers" null="1" autoincrement="0">
+<datatype>ENUM</datatype>
+<default>NULL</default><relation table="FlUser" row="id" />
+<comment>ManyToMany related with UserSummary, message can be broadcasted</comment>
+</row>
+<key type="PRIMARY" name="">
+<part>id</part>
+</key>
+<comment>Message is not a content. it's not deeplinked.</comment>
+</table>
+<table x="700" y="103" name="FlUser">
+<row name="id" null="1" autoincrement="1">
+<datatype>TINYINT</datatype>
+<default>NULL</default></row>
+<row name="username" null="1" autoincrement="0">
+<datatype>VARCHAR</datatype>
+<default>NULL</default></row>
+<row name="password" null="1" autoincrement="0">
+<datatype>VARCHAR</datatype>
+<default>NULL</default></row>
+<row name="email" null="1" autoincrement="0">
+<datatype>VARCHAR</datatype>
+<default>NULL</default></row>
+<row name="firstName [opt]" null="1" autoincrement="0">
+<datatype>VARCHAR</datatype>
+<default>NULL</default></row>
+<row name="lastName [opt]" null="1" autoincrement="0">
+<datatype>VARCHAR</datatype>
+<default>NULL</default></row>
+<row name="aboutMe[opt]" null="1" autoincrement="0">
+<datatype>VARCHAR</datatype>
+<default>NULL</default></row>
+<row name="phone [opt]" null="1" autoincrement="0">
+<datatype>VARCHAR</datatype>
+<default>NULL</default></row>
+<row name="socials " null="1" autoincrement="0">
+<datatype>VARCHAR</datatype>
+<default>NULL</default><comment>JSON-array, e.g. [{"title":"xx","url":"yy"},...]</comment>
+</row>
+<row name="#photo [opt]" null="1" autoincrement="0">
+<datatype>ENUM</datatype>
+<default>NULL</default><comment>ManyToOne related with CloudImage</comment>
+</row>
+<row name="#flRole" null="1" autoincrement="0">
+<datatype>ENUM</datatype>
+<default>NULL</default><relation table="*FlRole" row="id" />
+<comment>ManyToOne related with FlRole, each user has one and only one Role</comment>
+</row>
+<row name="#location [opt]" null="1" autoincrement="0">
+<datatype>ENUM</datatype>
+<default>NULL</default><relation table="Location" row="id" />
+<comment>ManyToOne related with Location, GMap implementation</comment>
+</row>
+<row name="%mySites" null="1" autoincrement="0">
+<datatype>ENUM</datatype>
+<default>NULL</default><comment>Sites mastered by current user</comment>
+</row>
+<key type="PRIMARY" name="">
+<part>id</part>
+</key>
+</table>
+<table x="1006" y="182" name="*FlRole">
+<row name="id" null="1" autoincrement="1">
+<datatype>TINYINT</datatype>
+<default>NULL</default></row>
+<row name="role" null="1" autoincrement="0">
+<datatype>VARCHAR</datatype>
+<default>NULL</default><comment>Flooful Administrator</comment>
+</row>
+<row name="description" null="1" autoincrement="0">
+<datatype>VARCHAR</datatype>
+<default>NULL</default></row>
+<row name="%flPermissions" null="1" autoincrement="0">
+<datatype>ENUM</datatype>
+<default>NULL</default><relation table="*FlPermission" row="id" />
+<comment>ManyToMany related with FlPermission</comment>
+</row>
+<key type="PRIMARY" name="">
+<part>id</part>
+</key>
+</table>
+<table x="1183" y="197" name="*FlPermission">
+<row name="id" null="1" autoincrement="1">
+<datatype>TINYINT</datatype>
+<default>NULL</default></row>
+<row name="permission" null="1" autoincrement="0">
+<datatype>VARCHAR</datatype>
+<default>NULL</default></row>
+<row name="description" null="1" autoincrement="0">
+<datatype>VARCHAR</datatype>
+<default>NULL</default></row>
+<key type="PRIMARY" name="">
+<part>id</part>
+</key>
+<comment>There are not so many objects in FF. Most objects are instances of Content!! That make the permission easy</comment>
+</table>
+<table x="966" y="723" name="*Field">
+<row name="id" null="1" autoincrement="1">
+<datatype>TINYINT</datatype>
+<default>NULL</default></row>
+<row name="field" null="1" autoincrement="0">
+<datatype>VARCHAR</datatype>
+<default>NULL</default></row>
+<row name="description [opt]" null="1" autoincrement="0">
+<datatype>VARCHAR</datatype>
+<default>NULL</default></row>
+<key type="PRIMARY" name="">
+<part>id</part>
+</key>
+<comment>Field is the top level catalogue for all contents in FF. The fields are defined by FF and used by FF. A site should select some fields when it's creating. And each content should set a field attribute of the Site fields</comment>
+</table>
+<table x="962" y="554" name="HostData">
+<row name="id" null="1" autoincrement="1">
+<datatype>TINYINT</datatype>
+<default>NULL</default></row>
+<row name="title" null="1" autoincrement="0">
+<datatype>VARCHAR</datatype>
+<default>NULL</default></row>
+<row name="config" null="1" autoincrement="0">
+<datatype>VARCHAR</datatype>
+<default>NULL</default><comment>JSON string, will be converted to Js object to config the ng-class and styles</comment>
+</row>
+<row name="%site" null="1" autoincrement="0">
+<datatype>ENUM</datatype>
+<default>NULL</default><comment>OneToOne related with Site</comment>
+</row>
+<row name="%regions" null="1" autoincrement="0">
+<datatype>ENUM</datatype>
+<default>NULL</default></row>
+<key type="PRIMARY" name="">
+<part>id</part>
+</key>
+<comment>The code to render the HostPage. It's store in database. A Site can have multiple hosting code. Or we can call them as skins. Site Master can load already HostData and modify it to be his own HostData. This is the most easy way to create a Site.</comment>
+</table>
+<table x="120" y="126" name="Comment">
+<row name="id" null="1" autoincrement="1">
+<datatype>TINYINT</datatype>
+<default>NULL</default></row>
+<row name="title" null="1" autoincrement="0">
+<datatype>VARCHAR</datatype>
+<default>NULL</default></row>
+<row name="html" null="1" autoincrement="0">
+<datatype>VARCHAR</datatype>
+<default>NULL</default></row>
+<row name="#content" null="1" autoincrement="0">
+<datatype>ENUM</datatype>
+<default>NULL</default><relation table="Content" row="id" />
+<comment>ManyToOne related with Content</comment>
+</row>
+<key type="PRIMARY" name="">
+<part>id</part>
+</key>
+<comment>Comment is a special textual message appending to 'comment enabled'contents </comment>
+</table>
+<table x="260" y="1213" name="(UserSummary)">
+<row name="id" null="1" autoincrement="1">
+<datatype>TINYINT</datatype>
+<default>NULL</default></row>
+<row name="username" null="1" autoincrement="0">
+<datatype>VARCHAR</datatype>
+<default>NULL</default></row>
+<row name="email" null="1" autoincrement="0">
+<datatype>VARCHAR</datatype>
+<default>NULL</default></row>
+<row name="aboutMe" null="1" autoincrement="0">
+<datatype>VARCHAR</datatype>
+<default>NULL</default></row>
+<row name="socials [opt]" null="1" autoincrement="0">
+<datatype>VARCHAR</datatype>
+<default>NULL</default></row>
+<row name="#photo [opt]" null="1" autoincrement="0">
+<datatype>ENUM</datatype>
+<default>NULL</default></row>
+<row name="#location" null="1" autoincrement="0">
+<datatype>ENUM</datatype>
+<default>NULL</default></row>
+<key type="PRIMARY" name="">
+<part>id</part>
+</key>
+<comment>It's not a real Entity, only a simplified and read-only object of FlUser. All the sensitive info was removed. The boilerplate field createdBy and modifiedBy are related with this object</comment>
+</table>
+<table x="974" y="374" name="Location">
+<row name="id" null="1" autoincrement="1">
+<datatype>TINYINT</datatype>
+<default>NULL</default></row>
+<row name="country" null="1" autoincrement="0">
+<datatype>VARCHAR</datatype>
+<default>NULL</default><comment>Copy the title of Conuntry Entity</comment>
+</row>
+<row name="city" null="1" autoincrement="0">
+<datatype>VARCHAR</datatype>
+<default>NULL</default></row>
+<row name="coordinates" null="1" autoincrement="0">
+<datatype>VARCHAR</datatype>
+<default>NULL</default><comment>GMap longitude and latitude</comment>
+</row>
+<key type="PRIMARY" name="">
+<part>id</part>
+</key>
+<comment>Contain address info, together with Gmap implementation</comment>
+</table>
+<table x="103" y="319" name="LangText">
+<row name="id" null="1" autoincrement="1">
+<datatype>TINYINT</datatype>
+<default>NULL</default></row>
+<row name="title" null="1" autoincrement="0">
+<datatype>VARCHAR</datatype>
+<default>NULL</default><comment>The title in content, not tile of itselt!!</comment>
+</row>
+<row name="author" null="1" autoincrement="0">
+<datatype>VARCHAR</datatype>
+<default>NULL</default></row>
+<row name="description [opt]" null="1" autoincrement="0">
+<datatype>VARCHAR</datatype>
+<default>NULL</default></row>
+<row name="html [opt]" null="1" autoincrement="0">
+<datatype>VARCHAR</datatype>
+<default>NULL</default></row>
+<key type="PRIMARY" name="">
+<part>id</part>
+</key>
+<comment>Textual items in contents, English or Chinese</comment>
+</table>
+<table x="93" y="830" name="CloudImage">
+<row name="id" null="1" autoincrement="1">
+<datatype>TINYINT</datatype>
+<default>NULL</default></row>
+<row name="title" null="1" autoincrement="0">
+<datatype>VARCHAR</datatype>
+<default>NULL</default></row>
+<row name="description" null="1" autoincrement="0">
+<datatype>VARCHAR</datatype>
+<default>NULL</default></row>
+<row name="url" null="1" autoincrement="0">
+<datatype>VARCHAR</datatype>
+<default>NULL</default><comment>url of the image, either of local server or cloud</comment>
+</row>
+<key type="PRIMARY" name="">
+<part>id</part>
+</key>
+</table>
+<table x="101" y="715" name="CloudFile">
+<row name="id" null="1" autoincrement="1">
+<datatype>TINYINT</datatype>
+<default>NULL</default></row>
+<row name="new field" null="1" autoincrement="0">
+<datatype>TINYINT</datatype>
+<default>NULL</default></row>
+<key type="PRIMARY" name="">
+<part>id</part>
+</key>
+</table>
+<table x="104" y="522" name="CloudVideo">
+<row name="id" null="1" autoincrement="1">
+<datatype>TINYINT</datatype>
+<default>NULL</default></row>
+<key type="PRIMARY" name="">
+<part>id</part>
+</key>
+</table>
+<table x="100" y="609" name="CloudAudio">
+<row name="id" null="1" autoincrement="1">
+<datatype>TINYINT</datatype>
+<default>NULL</default></row>
+<key type="PRIMARY" name="">
+<part>id</part>
+</key>
+</table>
+<table x="1188" y="602" name="Region">
+<row name="id" null="1" autoincrement="1">
+<datatype>TINYINT</datatype>
+<default>NULL</default></row>
+<row name="title" null="1" autoincrement="0">
+<datatype>VARCHAR</datatype>
+<default>NULL</default><comment>Copy the title of its RegionType</comment>
+</row>
+<row name="config" null="1" autoincrement="0">
+<datatype>VARCHAR</datatype>
+<default>NULL</default><comment>JSON data</comment>
+</row>
+<row name="#hostData" null="1" autoincrement="0">
+<datatype>ENUM</datatype>
+<default>NULL</default><relation table="HostData" row="id" />
+</row>
+<row name="%widgets" null="1" autoincrement="0">
+<datatype>ENUM</datatype>
+<default>NULL</default></row>
+<row name="#regionType" null="1" autoincrement="0">
+<datatype>ENUM</datatype>
+<default>NULL</default><relation table="*RegionType" row="id" />
+</row>
+<key type="PRIMARY" name="">
+<part>id</part>
+</key>
+</table>
+<table x="959" y="852" name="Widget">
+<row name="id" null="1" autoincrement="1">
+<datatype>TINYINT</datatype>
+<default>NULL</default></row>
+<row name="title" null="1" autoincrement="0">
+<datatype>VARCHAR</datatype>
+<default>NULL</default><comment>Copy the title of its ComponentType</comment>
+</row>
+<row name="code" null="1" autoincrement="0">
+<datatype>VARCHAR</datatype>
+<default>NULL</default></row>
+<row name="config" null="1" autoincrement="0">
+<datatype>VARCHAR</datatype>
+<default>NULL</default><comment>JSON data</comment>
+</row>
+<row name="displayOrder" null="1" autoincrement="0">
+<datatype>INTEGER</datatype>
+<default>NULL</default><comment>The sequence of the view</comment>
+</row>
+<row name="#region" null="1" autoincrement="0">
+<datatype>ENUM</datatype>
+<default>NULL</default><relation table="Region" row="id" />
+</row>
+<key type="PRIMARY" name="">
+<part>id</part>
+</key>
+<comment>The widget object, instance of WidgetType</comment>
+</table>
+<table x="1373" y="738" name="*RegionType">
+<row name="id" null="1" autoincrement="1">
+<datatype>TINYINT</datatype>
+<default>NULL</default></row>
+<row name="title" null="1" autoincrement="0">
+<datatype>VARCHAR</datatype>
+<default>NULL</default></row>
+<row name="iconUrl" null="1" autoincrement="0">
+<datatype>VARCHAR</datatype>
+<default>NULL</default><comment>An icon which is draggable</comment>
+</row>
+<row name="config" null="1" autoincrement="0">
+<datatype>VARCHAR</datatype>
+<default>NULL</default><comment>The default config JSON data for this rgn type, layoutTemplate use the default config</comment>
+</row>
+<row name="description" null="1" autoincrement="0">
+<datatype>VARCHAR</datatype>
+<default>NULL</default></row>
+<row name="%widgetTypes" null="1" autoincrement="0">
+<datatype>ENUM</datatype>
+<default>NULL</default><relation table="*WidgetType" row="id" />
+</row>
+<key type="PRIMARY" name="">
+<part>id</part>
+</key>
+<comment>Now there are 9 region types, "BANNER","HEAD","CAPTION","LEFT","RIGHT","FOOT","MAIN_LIST","MAIN_INSTANCE","DEFAULT_VIEW".</comment>
+</table>
+<table x="888" y="47" name="Social">
+<row name="id" null="1" autoincrement="1">
+<datatype>TINYINT</datatype>
+<default>NULL</default></row>
+<row name="title" null="1" autoincrement="0">
+<datatype>VARCHAR</datatype>
+<default>NULL</default></row>
+<row name="iconUrl" null="1" autoincrement="0">
+<datatype>VARCHAR</datatype>
+<default>NULL</default></row>
+<key type="PRIMARY" name="">
+<part>id</part>
+</key>
+<comment>Social types, e.g. facebook, linkedin,... Used as selecting candidates for UI operation.  User and Site have JSON-array field for their socials</comment>
+</table>
+<table x="1037" y="48" name="Country">
+<row name="id" null="1" autoincrement="1">
+<datatype>TINYINT</datatype>
+<default>NULL</default></row>
+<row name="title" null="1" autoincrement="0">
+<datatype>VARCHAR</datatype>
+<default>NULL</default></row>
+<key type="PRIMARY" name="">
+<part>id</part>
+</key>
+<comment>Countries for country-select UI, the icon is images/country/{{title.lowercase}}.png</comment>
+</table>
+<table x="471" y="1217" name="(SiteSummary)">
+<row name="id" null="1" autoincrement="1">
+<datatype>TINYINT</datatype>
+<default>NULL</default></row>
+<row name="name" null="1" autoincrement="0">
+<datatype>VARCHAR</datatype>
+<default>NULL</default></row>
+<row name="domain" null="1" autoincrement="0">
+<datatype>VARCHAR</datatype>
+<default>NULL</default></row>
+<row name="description" null="1" autoincrement="0">
+<datatype>VARCHAR</datatype>
+<default>NULL</default></row>
+<row name="#logo" null="1" autoincrement="0">
+<datatype>ENUM</datatype>
+<default>NULL</default></row>
+<key type="PRIMARY" name="">
+<part>id</part>
+</key>
+<comment>A read-only simplified Site</comment>
+</table>
+<table x="1356" y="951" name="*WidgetType">
+<row name="id" null="1" autoincrement="1">
+<datatype>TINYINT</datatype>
+<default>NULL</default></row>
+<row name="title" null="1" autoincrement="0">
+<datatype>VARCHAR</datatype>
+<default>NULL</default><comment>Read friendy name of this widget</comment>
+</row>
+<row name="code" null="1" autoincrement="0">
+<datatype>VARCHAR</datatype>
+<default>NULL</default><comment>Intrernal used, it's the module code, .js module name, css file name</comment>
+</row>
+<row name="config" null="1" autoincrement="0">
+<datatype>VARCHAR</datatype>
+<default>NULL</default><comment>JSON object, defined how to config this widget</comment>
+</row>
+<row name="description" null="1" autoincrement="0">
+<datatype>VARCHAR</datatype>
+<default>NULL</default></row>
+<row name="%regionType" null="1" autoincrement="0">
+<datatype>ENUM</datatype>
+<default>NULL</default><comment>What regions this widget can be deployed in</comment>
+</row>
+<key type="PRIMARY" name="">
+<part>id</part>
+</key>
+<comment>The Widget prototype available in vaselite</comment>
+</table>
+<table x="61" y="1211" name="System Tag">
+<row name="id" null="1" autoincrement="1">
+<datatype>TINYINT</datatype>
+<default>NULL</default></row>
+<row name="titleEn" null="1" autoincrement="0">
+<datatype>VARCHAR</datatype>
+<default>NULL</default></row>
+<row name="titleZh" null="1" autoincrement="0">
+<datatype>VARCHAR</datatype>
+<default>NULL</default></row>
+<row name="path" null="1" autoincrement="0">
+<datatype>VARCHAR</datatype>
+<default>NULL</default></row>
+<row name="descriptionEn [opt]" null="1" autoincrement="0">
+<datatype>VARCHAR</datatype>
+<default>NULL</default></row>
+<row name="descriptionZh [opt]" null="1" autoincrement="0">
+<datatype>VARCHAR</datatype>
+<default>NULL</default></row>
+<key type="PRIMARY" name="">
+<part>id</part>
+</key>
+<comment>System Tag provide tags shared by all Site. There are some system logic related with these tags. Users can't edit these tags and they are copied to user's tag set automatically.</comment>
+</table>
+</sql>

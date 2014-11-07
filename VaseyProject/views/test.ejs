@@ -1,0 +1,123 @@
+
+<!DOCTYPE html>
+
+<html data-ng-app="App">
+<head>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>E2E Test</title>
+    
+	<!-- Including script libraries and CSS theme -->
+	<% include resource %>
+	
+    <style>
+    	body{
+    		
+    	}
+    	#testView{
+    		width:75%; 
+    		min-height:100px; 
+    		padding:20px; 
+    		float:left
+    	}
+    	
+    	#testIndex{
+    		width:25%; 
+    		height:450px; 
+    		padding:20px; 
+    		float:right; 
+    		background-color:#f8f8f8
+    	}
+    	
+    	#testIndex ul{
+    		list-style-type:none; 
+    		padding:0;
+    		margin:0; 
+    		font-size:1.1em
+    	}
+    	#testIndex li{
+    		font-family:consolas
+    	}
+    	
+    </style>
+</head>
+
+<body data-ng-controller='appBodyController' data-ng-click='anyClickOnBody($event)' style="padding:30px">
+	
+	<% include maskPop %>
+	
+	<div class='testCtner'  data-ng-controller='_scopeCtrl' data-ng-init='type="<%- unit.type %>"'>
+	
+		<h2 style="width:100%; background-color:#f8f8f8">
+			Unit e2e Test 
+			<span style='color:#c0c0c0'>>></span> <%- unit.path %><%- unit.name %>
+		</h2>
+		
+		<!-- Present static unit (using html as template) -->
+		<div id='testView' data-ng-controller='_scopeCtrl' data-ng-init='model=<%- jsonModel %>; cfg=<%- jsonCfg %>' 
+		 			data-ng-if='type=="static"' data-ng-include='"/html/<%- unit.path %><%- unit.name %>.html"'>
+		</div>
+		
+		<!-- Present dynamic unit (using Ejs as template) -->
+		<div id='testView' data-ng-controller='_scopeCtrl' data-ng-init='model=<%- jsonModel %>; cfg=<%- jsonCfg %>' 
+		 			data-ng-if='type=="dynamic"' data-ng-include='"/ejs/<%- unit.path %><%- unit.name %>"'>
+		</div>
+		
+		
+		
+		<!-- Index for all test units -->		
+		<div id='testIndex' class='hover-scroll-y' data-ng-controller='testIndexController'>
+			<a href='' data-ng-controller="_scopeCtrl" 
+						data-cstm-popscreen="{url:'/html/dev/md.html',model:'MODEL',width:880}" 
+						data-ng-init='md="resource/scripts/<%-unit.path %><%- unit.name %>"+".md"' style='float:right'>
+					Readme
+			</a><br>
+			<h5>~ Widgets ~</h5>
+			<ul>
+				<li data-ng-repeat='unit in units | filter:{path:"widgets"}'>
+					<a href="/_test/{{unit.path}}{{unit.name}}">{{unit.path}}{{unit.name}}</a>
+				</li>
+			</ul>
+			<h5>~ Components ~</h5>
+			<ul>
+				<li data-ng-repeat='unit in units | filter:{path:"components"}'>
+					<a href="/_test/{{unit.path}}{{unit.name}}">{{unit.path}}{{unit.name}}</a>
+				</li>
+			</ul>
+			<h5>~ Panels ~</h5>
+			<ul>
+				<li data-ng-repeat='unit in units | filter:{path:"panels"}'>
+					<a href='/_test/{{unit.path}}{{unit.name}}'>{{unit.path}}{{unit.name}}</a>
+				</li>
+			</ul>
+			<h5>~ Directives ~</h5>
+			<ul>
+				<li data-ng-repeat='unit in units | filter:{path:"directives"}'>
+					<a href='/_test/{{unit.path}}{{unit.name}}'>{{unit.path}}{{unit.name}}</a>
+				</li>
+			</ul>
+		</div>
+	</div>
+</body>
+
+	
+	<script>
+		var sys_ = sys_||{};
+		sys_.unitList = angular.fromJson(<%- jsonUnitList %>)
+		sys_.allModules = ['ngRoute','ngCookies','ngSanitize','ngAnimate','ngTouch','cstmDirectives','devTest'];
+		<% unit.modules.forEach(function(module){ %>
+			sys_.allModules.push('<%- module.name %>')
+		<% }) %>
+	</script>
+	
+	<!-- Dynamic loading script module files for testing component, passed by 'jsonModules' -->
+	<% unit.modules.forEach(function(module){ %>
+    		<script src='/scripts/<%- module.path %><%- module.name %>.js'></script>
+    		<link href='/styles/<%- module.path %><%- module.name %>.css' rel='stylesheet' type='text/css'>
+	<% }) %>
+	
+	<script src='/scripts/App.js'></script>
+	<script src='/scripts/dev/devTest.js'></script>
+	
+	
+</html>
